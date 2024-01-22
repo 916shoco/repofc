@@ -1,13 +1,13 @@
 {
-  "prefix": ",",
-  "token": "MTEzNDU5NjI0MDkyMzk3MTU4NA.GuJak-.LidK9WOAZzjBS7EnAKFMkfk-q4BWXgTwaFUCV4",
-  "permissions": "8",
-  "application_id": "1103401238302834760",
-  "sync_commands_globally": true,
-  "owners": [
-    229080154121437184, //
-    983535742343073832,
-    1098019806193668146,
-    1051233527510880276
-  ]
-}
+    "prefix": ",",
+    "token": "MTEzNDU5NjI0MDkyMzk3MTU4NA.GuJak-.LidK9WOAZzjBS7EnAKFMkfk-q4BWXgTwaFUCV4",
+    "permissions": "8",
+    "application_id": "1103401238302834760",
+    "sync_commands_globally": false,
+    "owners": [
+      1098019806193668146,
+      229080154121437184,
+      747482167528914984,
+      692176552489910293
+    ] 
+  }
