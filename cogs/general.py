@@ -56,17 +56,17 @@ class General(commands.Cog, name="general"):
         :param context: The hybrid command context.
         """
         embed = discord.Embed(
-            description="Used [Krypton's](https://krypton.ninja) template",
+            description="template usada [Krypton's](https://krypton.ninja)",
             color=0x9C84EF,
         )
         embed.set_author(name="Bot Information")
-        embed.add_field(name="Owner:", value="Krypton#7331", inline=True)
+        embed.add_field(name="Owner:", value="Shoco#0000", inline=True)
         embed.add_field(
             name="Python Version:", value=f"{platform.python_version()}", inline=True
         )
         embed.add_field(
             name="Prefix:",
-            value=f"/ (Slash Commands) or {self.bot.config['prefix']} for normal commands",
+            value=f"/ (Slash Commands) or {self.bot.config['prefix']} para comandos normal",
             inline=False,
         )
         embed.set_footer(text=f"Requested by {context.author}")
@@ -133,13 +133,13 @@ class General(commands.Cog, name="general"):
         :param context: The hybrid command context.
         """
         embed = discord.Embed(
-            description=f"Invite me by clicking [here](https://discordapp.com/oauth2/authorize?&client_id={self.bot.config['application_id']}&scope=bot+applications.commands&permissions={self.bot.config['permissions']}).",
+            description=f"Me convide clicando em [here](https://discordapp.com/oauth2/authorize?&client_id={self.bot.config['application_id']}&scope=bot+applications.commands&permissions={self.bot.config['permissions']}).",
             color=0xD75BF4,
         )
         try:
             # To know what permissions to give to your bot, please see here: https://discordapi.com/permissions.html and remember to not give Administrator permissions.
             await context.author.send(embed=embed)
-            await context.send("I sent you a private message!")
+            await context.send("Te enviei uma mensagem no privado!")
         except discord.Forbidden:
             await context.send(embed=embed)
 
@@ -155,21 +155,21 @@ class General(commands.Cog, name="general"):
         :param context: The hybrid command context.
         """
         embed = discord.Embed(
-            description=f"Join the support server for the bot by clicking [here](https://discord.gg/mTBrXyWxAF).",
+            description=f"Entre no server clicando aqui [here](https://discord.gg/WsdFeXab6E).",
             color=0xD75BF4,
         )
         try:
             await context.author.send(embed=embed)
-            await context.send("I sent you a private message!")
+            await context.send("Te enviei uma mensagem no privado rs")
         except discord.Forbidden:
             await context.send(embed=embed)
 
     @commands.hybrid_command(
         name="8ball",
-        description="Ask any question to the bot.",
+        description="Fassa uma pergunta ao bot.",
     )
     @checks.not_blacklisted()
-    @app_commands.describe(question="The question you want to ask.")
+    @app_commands.describe(question="A pergunta que você fez.")
     async def eight_ball(self, context: Context, *, question: str) -> None:
         """
         Ask any question to the bot.
@@ -178,26 +178,22 @@ class General(commands.Cog, name="general"):
         :param question: The question that should be asked by the user.
         """
         answers = [
-            "It is certain.",
-            "It is decidedly so.",
-            "You may rely on it.",
-            "Without a doubt.",
-            "Yes - definitely.",
-            "As I see, yes.",
-            "Most likely.",
-            "Outlook good.",
-            "Yes.",
-            "Signs point to yes.",
-            "Reply hazy, try again.",
-            "Ask again later.",
-            "Better not tell you now.",
-            "Cannot predict now.",
-            "Concentrate and ask again later.",
-            "Don't count on it.",
-            "My reply is no.",
-            "My sources say no.",
-            "Outlook not so good.",
-            "Very doubtful.",
+            "É certo.",
+            "É definitivamente assim.",
+            "Você pode confiar nisso.",
+            "Sem dúvida.",
+            "Sim, definitivamente sim.",
+            "Como eu vejo? sim.",
+            "Muito provavelmente.",
+            "Perspectivas boas.",
+            "Sim.",
+            "Os sinais apontam para o sim.",
+            "Resposta nebulosa, tente novamente.",
+            "Pergunte de novo mais tarde.",
+            "Melhor não te contar agora.",
+            "Não dá para prever agora.",
+            "Concentre-se e pergunte novamente mais tarde.",
+            
         ]
         embed = discord.Embed(
             title="**My Answer:**",

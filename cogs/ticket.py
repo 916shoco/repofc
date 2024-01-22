@@ -3,7 +3,7 @@ from discord.ext import commands
 
 from helpers import checks, db_manager
 
-id_cargo_atendente = "1064393279682129960"
+id_cargo_atendente = 1198347965920706672
 
 class Dropdown(discord.ui.Select):
     def __init__(self):
@@ -70,27 +70,26 @@ class CreateTicket(discord.ui.View):
             await ticket.edit(archived=False, locked=False)
             await ticket.edit(name=f"{interaction.user.name} ({interaction.user.id})", auto_archive_duration=10080, invitable=False)
             # Adiciona o botão "Fechar Ticket" diretamente à vista
-            self.add_item(Close_Ticket())
         else:
             ticket = await interaction.channel.create_thread(name=f"{interaction.user.name} ({interaction.user.id})", auto_archive_duration=10080)
             await ticket.edit(invitable=False)
 
         await interaction.response.send_message(ephemeral=True, content=f"Criei um ticket para você! {ticket.mention}")
-        await ticket.send(f"📩  **|** {interaction.user.mention}  ticket criado! Envie todas as informações possíveis sobre seu caso e aguarde até que um atendente responda.\n\nApós a sua questão ser sanada, você pode apertar no botão para encerrar o atendimento!")
+        await ticket.send(f"📩  **|** || {interaction.user.mention} <@&1198347965920706672> ||  Ticket criado com sucesso! Envie todas as informações possíveis sobre o seu caso e aguarde até que um atendente responda.\n\n Após a sua questão ser resolvida, clique em ""Fechar Ticket"" para encerrar o atendimento!")
         await ticket.send(view=Close_Ticket())
 
 class Close_Ticket(discord.ui.View):
     def __init__(self):
-        super().__init__()
+        super().__init__(timeout=None)
 
-    @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒")
+    @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='Close_Ticket')
     async def close_ticket(self, interaction:discord.Interaction, button:discord.ui.Button):
         mod = interaction.guild.get_role(id_cargo_atendente)
         if str(interaction.user.id) in interaction.channel.name or mod in interaction.author.roles:
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
-            await interaction.response.send_message("Isso não pode ser feito aqui...") 
+            await interaction.response.send_message("Isso não pode ser feito aqui...")
 
 class Ticket(commands.Cog, name="ticket"):
     def __init__(self, bot):
@@ -105,7 +104,7 @@ class Ticket(commands.Cog, name="ticket"):
         embed = discord.Embed(
             colour=discord.Color.pink(),
             title="Suporte Ticket",
-            description="Boas vindas ao nosso chat de ticket! Neste chat você pode solicitar seu atendimento rápido e eficaz. Então clique abaixo na categoria que vive deseja q aguarde nosso suporte!"
+            description="Boas vindas ao nosso suporte! Neste chat você pode solicitar seu atendimento rápido e eficaz.\n\nEntão clique abaixo na categoria desejada e aguarde nosso suporte!"
         )
         embed.set_image(url="https://media.discordapp.net/attachments/1162586160934158376/1165362186772824216/569_Sem_Titulo_20230817224211.png?format=webp")
         await ctx.send(embed=embed)
@@ -113,4 +112,5 @@ class Ticket(commands.Cog, name="ticket"):
 
 async def setup(bot):
     bot.add_view(DropdownView())
+    bot.add_view(Close_Ticket())
     await bot.add_cog(Ticket(bot))

@@ -1,11 +1,3 @@
-"""
-Copyright © Krypton 2019-2023 - https://github.com/kkrypt0nn (https://krypton.ninja)
-Description:
-🐍 A simple template to start to code your own and personalized discord bot in Python programming language.
-
-Version: 5.5.0
-"""
-
 import asyncio
 import json
 import logging
@@ -171,7 +163,7 @@ async def status_task() -> None:
     """
     Setup the game status task of the bot.
     """
-    statuses = ["with you!", "with Krypton!", "with humans!"]
+    statuses = ["shoco love boobs", "bunny is so cute ^-^", "Leiam tomodachi game!!!"]
     await bot.change_presence(activity=discord.Game(random.choice(statuses)))
 
 

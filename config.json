@@ -1,11 +1,11 @@
 {
   "prefix": ",",
-  "token": "MTEzODE5NDgzMDg0NjA3MDgxNQ.GiYt6j.kkcgQ9fPUv0Jsg-qP5lX-Pw-Mcdv_iGYXSU9e8",
+  "token": "MTEzNDU5NjI0MDkyMzk3MTU4NA.GuJak-.LidK9WOAZzjBS7EnAKFMkfk-q4BWXgTwaFUCV4",
   "permissions": "8",
   "application_id": "1103401238302834760",
-  "sync_commands_globally": false,
+  "sync_commands_globally": true,
   "owners": [
-    1091829050223382630,
+    229080154121437184, //
     983535742343073832,
     1098019806193668146,
     1051233527510880276
