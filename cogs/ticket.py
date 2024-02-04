@@ -106,7 +106,7 @@ class Ticket(commands.Cog, name="ticket"):
             title="Suporte Ticket",
             description="Boas vindas ao nosso suporte! Neste chat você pode solicitar seu atendimento rápido e eficaz.\n\nEntão clique abaixo na categoria desejada e aguarde nosso suporte!"
         )
-        embed.set_image(url="https://media.discordapp.net/attachments/1162586160934158376/1165362186772824216/569_Sem_Titulo_20230817224211.png?format=webp")
+        embed.set_image(url="https://media.discordapp.net/attachments/1191599069102092389/1203380243843252284/Suporte.png?ex=65d0e22f&is=65be6d2f&hm=46c7622f6bd3cd278cb30a7c506d245c6c1503c5ee94b345e9e1d51bbf6d394a&=&format=webp&quality=lossless&width=1440&height=480")
         await ctx.send(embed=embed)
         await ctx.send(view=DropdownView())
 

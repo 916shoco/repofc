@@ -58,7 +58,7 @@ class Modals(commands.Cog, name="form"):
             title="**__Faça parte da nossa equipe! Leia abaixo alguns requisitos para você fazer parte da nossa equipe:__**",
             description="- Ter mais de 14 anos.\n- Ter responsabilidade e maturidade.\n- Seguir todas as nossas regras.\n- Ter comprometimento com os seus deveres de staff.\nCaso você tenha todos esses requisitos, clique em (Seja staff) e faça seu formulário.\n\n>>> **Vagas disponíveis:**<@&1198347965912330273>\n<@&1198347965912330272>\n<@&1198347965912330274>\n<@&1198347965920706673>\n<@&1198347965912330278>/<@&1198347965912330277>\n<@&1198347965920706672>"
             )
-        embed.set_image(url="https://media.discordapp.net/attachments/1134194576563904522/1176244265962180708/539_Sem_Titulo4_20230806102355.png?ex=656e29d6&is=655bb4d6&hm=ca48aff47f471d7e798838e0c9e759aedb27bf1e51450fb4d1219ad1bc797138&=")
+        embed.set_image(url="https://media.discordapp.net/attachments/1191599069102092389/1203380244611072050/Staff.png?ex=65d0e230&is=65be6d30&hm=4520794d1d93ce6c9daf092987e6a036c79b1d690e024a5fc6bb49ef6c43efcb&=&format=webp&quality=lossless")
         await ctx.send(embed=embed)
         
         view = discord.ui.View
