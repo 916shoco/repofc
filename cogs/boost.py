@@ -20,7 +20,7 @@ class Boost(commands.Cog, name="boost"):
         doublebooster = servidor.get_role(get_role_id())
 
         if onebooster in before.roles and onebooster not in after.roles:
-            await after.remove_roles(doublebooster)  
+            await after.remove_roles(doublebooster)
             canal = after.guild.system_channel
             await canal.send(f"{after.mention} não é mais Booster")
             await changeBoost(after,0)

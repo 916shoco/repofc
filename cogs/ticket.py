@@ -85,7 +85,7 @@ class Close_Ticket(discord.ui.View):
     @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='Close_Ticket')
     async def close_ticket(self, interaction:discord.Interaction, button:discord.ui.Button):
         mod = interaction.guild.get_role(id_cargo_atendente)
-        if str(interaction.user.id) in interaction.channel.name or mod in interaction.author.roles:
+        if str(interaction.user.id) in interaction.channel.name or mod in interaction.user.roles:
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
@@ -102,7 +102,7 @@ class Ticket(commands.Cog, name="ticket"):
     @checks.is_owner()
     async def painel(self, ctx: commands.Context):
         embed = discord.Embed(
-            colour=discord.Color.pink(),
+            colour=discord.Color.dark_blue(),  # Alterando a cor para azul escuro
             title="Suporte Ticket",
             description="Boas vindas ao nosso suporte! Neste chat você pode solicitar seu atendimento rápido e eficaz.\n\nEntão clique abaixo na categoria desejada e aguarde nosso suporte!"
         )
