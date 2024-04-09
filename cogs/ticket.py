@@ -1,9 +1,13 @@
 import discord
 from discord.ext import commands
 
-from helpers import checks, db_manager
-
-id_cargo_atendente = 1198347965920706672
+id_cargos = {
+    "comprar": 1198347965920706678,  # ID do cargo para compras
+    "duvidas": 1198347965920706672,  # ID do cargo para dúvidas
+    "denunciar": 1198347965920706674,  # ID do cargo para denúncias
+    "parceria": 1198347965912330274,  # ID do cargo para parcerias
+    "patrocinio": 1198347965920706678  # ID do cargo para patrocínios
+}
 
 class Dropdown(discord.ui.Select):
     def __init__(self):
@@ -23,69 +27,43 @@ class Dropdown(discord.ui.Select):
         )
 
     async def callback(self, interaction: discord.Interaction):
-        if self.values[0] == "comprar":
-            await interaction.response.send_message("Compre cargos e vip", ephemeral=True, view=CreateTicket())
-        elif self.values[0] == "parceria":
-            await interaction.response.send_message("Faça parceria com nosso servidor", ephemeral=True, view=CreateTicket())
-        elif self.values[0] == "patrocinio":
-            await interaction.response.send_message("Solicite esse ticket para fazer seu patrocinio", ephemeral=True, view=CreateTicket())
-        elif self.values[0] == "duvidas":
-            await interaction.response.send_message("Tire sua duvida sobre qualquer coisa aqui", ephemeral=True, view=CreateTicket())
-        elif self.values[0] == "denunciar":
-            await interaction.response.send_message("Solicite esse ticket para fazer uma denuncia", ephemeral=True, view=CreateTicket())
+        option = self.values[0]
+
+        if option not in id_cargos:
+            return
+
+        category = option.capitalize()
+        cargo_id = id_cargos[option]
+
+        thread_name = f"{interaction.user.name} - {category}"
+        thread = await interaction.channel.create_thread(
+            name=thread_name,
+            reason=f"Thread criada por {interaction.user.name} ({interaction.user.id})",
+            auto_archive_duration=1440  # 24 horas
+        )
+
+        await interaction.response.send_message(
+            f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
+            ephemeral=True
+        )
+
+        await thread.send(f"Ticket criado por {interaction.user.mention} na categoria {category}. Aguarde atendimento! Cargo correspondente: <@&{cargo_id}>")
+        await thread.send(view=CloseTicket(cargo_id, interaction.user.id))  # Passa o ID do criador da thread
 
 class DropdownView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         self.add_item(Dropdown())
 
-class CreateTicket(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=300)
-        self.value = None
-
-    @discord.ui.button(label="Abrir Ticket", style=discord.ButtonStyle.blurple, emoji="➕")
-    async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
-        self.value = True
-        self.stop()
-
-        ticket = None
-        for thread in interaction.channel.threads:
-            if f"{interaction.user.id}" in thread.name:
-                if thread.archived:
-                    ticket = thread
-                else:
-                    await interaction.response.send_message(ephemeral=True, content=f"Você já tem um atendimento em andamento!")
-                    return
-
-        async for thread in interaction.channel.archived_threads(private=True):
-            if f"{interaction.user.id}" in thread.name:
-                if thread.archived:
-                    ticket = thread
-                else:
-                    await interaction.edit_original_response(content=f"Você já tem um atendimento em andamento!", view=None)
-                    return
-        
-        if ticket is not None:
-            await ticket.edit(archived=False, locked=False)
-            await ticket.edit(name=f"{interaction.user.name} ({interaction.user.id})", auto_archive_duration=10080, invitable=False)
-            # Adiciona o botão "Fechar Ticket" diretamente à vista
-        else:
-            ticket = await interaction.channel.create_thread(name=f"{interaction.user.name} ({interaction.user.id})", auto_archive_duration=10080)
-            await ticket.edit(invitable=False)
-
-        await interaction.response.send_message(ephemeral=True, content=f"Criei um ticket para você! {ticket.mention}")
-        await ticket.send(f"📩  **|** || {interaction.user.mention} <@&1198347965920706672> ||  Ticket criado com sucesso! Envie todas as informações possíveis sobre o seu caso e aguarde até que um atendente responda.\n\n Após a sua questão ser resolvida, clique em ""Fechar Ticket"" para encerrar o atendimento!")
-        await ticket.send(view=Close_Ticket())
-
-class Close_Ticket(discord.ui.View):
-    def __init__(self):
+class CloseTicket(discord.ui.View):
+    def __init__(self, cargo_id, thread_creator_id):
         super().__init__(timeout=None)
+        self.cargo_id = cargo_id
+        self.thread_creator_id = thread_creator_id
 
-    @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='Close_Ticket')
-    async def close_ticket(self, interaction:discord.Interaction, button:discord.ui.Button):
-        mod = interaction.guild.get_role(id_cargo_atendente)
-        if str(interaction.user.id) in interaction.channel.name or mod in interaction.user.roles:
+    @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='CloseTicket')
+    async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if interaction.user.id == self.thread_creator_id or any(role.id == self.cargo_id for role in interaction.user.roles):
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
@@ -99,10 +77,10 @@ class Ticket(commands.Cog, name="ticket"):
         name="painel",
         description="Ticket painel."
     )
-    @checks.is_owner()
+    @commands.is_owner()
     async def painel(self, ctx: commands.Context):
         embed = discord.Embed(
-            colour=discord.Color.dark_blue(),  # Alterando a cor para azul escuro
+            colour=discord.Color.dark_blue(),
             title="Suporte Ticket",
             description="Boas vindas ao nosso suporte! Neste chat você pode solicitar seu atendimento rápido e eficaz.\n\nEntão clique abaixo na categoria desejada e aguarde nosso suporte!"
         )
@@ -112,5 +90,4 @@ class Ticket(commands.Cog, name="ticket"):
 
 async def setup(bot):
     bot.add_view(DropdownView())
-    bot.add_view(Close_Ticket())
     await bot.add_cog(Ticket(bot))

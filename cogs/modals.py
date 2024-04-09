@@ -6,7 +6,6 @@ from helpers import checks, db_manager
 class PersistentView(commands.Bot):
     def __init__(self):
         self.add_view(Formulario())
-        
 
 class Formulario(discord.ui.View):
     def __init__(self):
@@ -21,11 +20,20 @@ class FormularioModal(discord.ui.Modal):
         super().__init__(title="Formulário")
 
         self.user_name = discord.ui.TextInput(label='Insira seu id, nome e idade', placeholder="EX. (1051233527510880276, 916shoco#000, 18)", required=True, max_length=100)
-        self.staff = discord.ui.TextInput(label='Em qual área você deseja entrar', placeholder="Ex. (MOV.CHAT/MOV.CALL, JORNALISTA, PARCERIA, SUPORTE, ORG.EVENTOS, DESIGNER)", required=True, max_length=100)
+        self.staff = discord.ui.Select(
+            placeholder='Em qual área você deseja entrar',
+            options=[
+                discord.SelectOption(label='MOV.CHAT/MOV.CALL', value='MOV.CHAT/MOV.CALL'),
+                discord.SelectOption(label='JORNALISTA', value='JORNALISTA'),
+                discord.SelectOption(label='PARCERIA', value='PARCERIA'),
+                discord.SelectOption(label='SUPORTE', value='SUPORTE'),
+                discord.SelectOption(label='ORG.EVENTOS', value='ORG.EVENTOS'),
+                discord.SelectOption(label='DESIGNER', value='DESIGNER')
+            ]
+        )
         self.xp = discord.ui.TextInput(label='Tem experiencia como staf? se sim, qual área', placeholder="DIGITE AQUI", required=True, max_length=100)
         self.quest = discord.ui.TextInput(label='Para você qual signficado de maturidade?', placeholder="DIGITE AQUI", required=True, max_length=100)
         self.quest2 = discord.ui.TextInput(label='Por que deseja fazer parte da nossa equipe?', placeholder="DIGITE AQUI", required=True, max_length=100)
-
 
         self.add_item(self.user_name)
         self.add_item(self.staff)
@@ -34,7 +42,7 @@ class FormularioModal(discord.ui.Modal):
         self.add_item(self.quest2)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.send_message(f"Obrigado por fazer o formulário, {interaction.user.mention}! Iremos conferir as suas respostas.", ephemeral = True)
+        await interaction.response.send_message(f"Obrigado por fazer o formulário, {interaction.user.mention}! Iremos conferir as suas respostas.", ephemeral=True)
 
         channel = discord.utils.get(interaction.guild.text_channels, name="👥﹒log-form")
         if channel is not None:
@@ -54,7 +62,7 @@ class Modals(commands.Cog, name="form"):
     async def textbox(self, ctx: commands.Context):
         
         embed = discord.Embed(
-            colour=discord.Color.pink(),
+            colour=discord.Color.dark_blue(),
             title="**__Faça parte da nossa equipe! Leia abaixo alguns requisitos para você fazer parte da nossa equipe:__**",
             description="- Ter mais de 14 anos.\n- Ter responsabilidade e maturidade.\n- Seguir todas as nossas regras.\n- Ter comprometimento com os seus deveres de staff.\nCaso você tenha todos esses requisitos, clique em (Seja staff) e faça seu formulário.\n\n>>> **Vagas disponíveis:**<@&1198347965912330273>\n<@&1198347965912330272>\n<@&1198347965912330274>\n<@&1198347965920706673>\n<@&1198347965912330278>/<@&1198347965912330277>\n<@&1198347965920706672>"
             )
@@ -65,7 +73,6 @@ class Modals(commands.Cog, name="form"):
         view = Formulario()
         await ctx.send(view=view)
 
-
 async def setup(bot):
-   bot.add_view(Formulario())
-   await bot.add_cog(Modals(bot))
+    bot.add_view(Formulario())
+    await bot.add_cog(Modals(bot))

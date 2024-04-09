@@ -1,8 +1,8 @@
 import random
-from discord.ext import commands,tasks
+from discord.ext import commands, tasks
 import discord
 from discord import app_commands
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 import time
 
 from database.boosts import addBoost, changeBoost
@@ -11,11 +11,11 @@ from database.roles import get_role_id, set_role_id
 class Boost(commands.Cog, name="boost"):
     def __init__(self, bot):
         self.bot = bot
+        self.lastfirstbooster = None
             
-    lastfirstbooster = None
     @commands.Cog.listener()
-    async def on_member_update(self, before,after):
-        servidor =  after.guild
+    async def on_member_update(self, before, after):
+        servidor = after.guild
         onebooster = servidor.premium_subscriber_role
         doublebooster = servidor.get_role(get_role_id())
 
@@ -23,21 +23,19 @@ class Boost(commands.Cog, name="boost"):
             await after.remove_roles(doublebooster)
             canal = after.guild.system_channel
             await canal.send(f"{after.mention} não é mais Booster")
-            await changeBoost(after,0)
+            await changeBoost(after, 0)
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.guild == None:
+        if message.guild is None:
             return
         
-        if message.guild.system_channel == None:
+        if message.guild.system_channel is None:
             return
         
         if message.channel.id == message.guild.system_channel.id:
-            if message.type in [discord.MessageType.premium_guild_subscription,discord.MessageType.premium_guild_tier_1,discord.MessageType.premium_guild_tier_2,discord.MessageType.premium_guild_tier_3]:
-                
+            if message.type in [discord.MessageType.premium_guild_subscription, discord.MessageType.premium_guild_tier_1, discord.MessageType.premium_guild_tier_2, discord.MessageType.premium_guild_tier_3]:
                 usuariobooster = message.author
-
                 boosts = await addBoost(usuariobooster)
 
                 if boosts >= 2:
@@ -48,8 +46,7 @@ class Boost(commands.Cog, name="boost"):
                 else:
                     await message.channel.send(f"{message.author.mention} virou 1x booster")
 
-        
-    @commands.hybrid_command(name="configurar",description='Configure seu bot de impulsos')
+    @commands.hybrid_command(name="configurar", description='Configure seu bot de impulsos')
     @app_commands.default_permissions(administrator=True)
     async def configurar(self, interaction: discord.Interaction):
         await interaction.send(content="Carregando...", ephemeral=True)
