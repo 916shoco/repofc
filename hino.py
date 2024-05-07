@@ -12,7 +12,7 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    channel = discord.utils.get(member.guild.text_channels, name="general")
+    channel = discord.utils.get(member.guild.text_channels, name="💬﹕bate-papo ")
     if channel is not None:
         message_content = (f"{member.mention}")
 
