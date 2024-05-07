@@ -1,14 +1,16 @@
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'fun'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'moderation'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'loja'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'template'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'owner'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'ticket'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'general'
-[2024-04-09 22:21:58] [INFO    ] discord_bot: Loaded extension 'boost'
-[2024-04-09 22:21:59] [INFO    ] discord_bot: Loaded extension 'modals'
-[2024-04-09 22:22:01] [INFO    ] discord_bot: Logged in as yuuki
-[2024-04-09 22:22:01] [INFO    ] discord_bot: discord.py API version: 2.3.2
-[2024-04-09 22:22:01] [INFO    ] discord_bot: Python version: 3.10.8
-[2024-04-09 22:22:01] [INFO    ] discord_bot: Running on: Linux 6.2.0-1019-azure (posix)
-[2024-04-09 22:22:01] [INFO    ] discord_bot: -------------------
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'fun'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'moderation'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'loja'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'template'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'owner'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'ticket'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'agenda'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'general'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'welcome'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'boost'
+[2024-05-07 16:40:49] [INFO    ] discord_bot: Loaded extension 'modals'
+[2024-05-07 16:40:52] [INFO    ] discord_bot: Logged in as yuuki
+[2024-05-07 16:40:52] [INFO    ] discord_bot: discord.py API version: 2.3.2
+[2024-05-07 16:40:52] [INFO    ] discord_bot: Python version: 3.10.8
+[2024-05-07 16:40:52] [INFO    ] discord_bot: Running on: Linux 6.5.0-1018-azure (posix)
+[2024-05-07 16:40:52] [INFO    ] discord_bot: -------------------
