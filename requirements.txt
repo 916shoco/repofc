@@ -1,5 +1,4 @@
 aiohttp
 aiosqlite
 discord.py
-pillow
-PIL
+Pillow
