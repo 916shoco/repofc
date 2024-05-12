@@ -3,7 +3,7 @@ import random
 from discord.ext import commands
 from PIL import Image
 from io import BytesIO
-import request
+import requests
 import PIL 
 
 messages = [
