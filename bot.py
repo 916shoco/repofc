@@ -53,6 +53,7 @@ intents.presences = True
 """
 
 intents = discord.Intents.default()
+intents.members =True
 
 """
 Uncomment this if you want to use prefix (normal) commands.
