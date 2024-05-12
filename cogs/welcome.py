@@ -1,6 +1,5 @@
 import discord
 import random
-import request
 from discord.ext import commands
 from PIL import Image
 from io import BytesIO
@@ -27,8 +26,7 @@ image_urls = [
 
 def get_average_color(image_url):
     try:
-        response = requests.get(image_url, timeout=5)
-        image = Image.open(BytesIO(response.content))
+        image = Image.open(BytesIO(requests.get(image_url, timeout=5).content))
     except PIL.UnidentifiedImageError:
         return None
     width, height = image.size
