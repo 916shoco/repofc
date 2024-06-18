@@ -1,13 +1,17 @@
 import discord
 from discord.ext import commands
 
+# IDs dos cargos para cada categoria
 id_cargos = {
-    "comprar": 1198347965920706678,  # ID do cargo para compras
-    "duvidas": 1198347965920706672,  # ID do cargo para dúvidas
-    "denunciar": 1198347965920706674,  # ID do cargo para denúncias
-    "parceria": 1198347965912330274,  # ID do cargo para parcerias
-    "patrocinio": 1198347965920706678  # ID do cargo para patrocínios
+    "comprar": 1198347965920706678,
+    "duvidas": 1198347965920706672,
+    "denunciar": 1198347965920706674,
+    "parceria": 1198347965912330274,
+    "patrocinio": 1198347965920706678
 }
+
+# ID do cargo de moderador
+MODERATOR_ROLE_ID = 1198347965899751545  # Substitua pelo ID real do cargo de moderador
 
 class Dropdown(discord.ui.Select):
     def __init__(self):
@@ -35,12 +39,24 @@ class Dropdown(discord.ui.Select):
         category = option.capitalize()
         cargo_id = id_cargos[option]
 
+        # Criar a thread privada
         thread_name = f"{interaction.user.name} - {category}"
         thread = await interaction.channel.create_thread(
             name=thread_name,
+            type=discord.ChannelType.private_thread,
             reason=f"Thread criada por {interaction.user.name} ({interaction.user.id})",
             auto_archive_duration=1440  # 24 horas
         )
+
+        # Conceder permissão ao autor e aos moderadores
+        await thread.edit(invitable=False)  # Apenas moderadores podem adicionar membros
+        await thread.add_user(interaction.user)
+
+        mod_role = interaction.guild.get_role(MODERATOR_ROLE_ID)
+        if mod_role:
+            for member in interaction.guild.members:
+                if mod_role in member.roles:
+                    await thread.add_user(member)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
@@ -67,7 +83,7 @@ class CloseTicket(discord.ui.View):
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
-            await interaction.response.send_message("Isso não pode ser feito aqui...")
+            await interaction.response.send_message("Você não tem permissão para fechar este ticket.", ephemeral=True)
 
 class Ticket(commands.Cog, name="ticket"):
     def __init__(self, bot):
