@@ -10,17 +10,14 @@ id_cargos = {
     "patrocinio": 1198347965920706678
 }
 
-# ID do cargo de moderador
-MODERATOR_ROLE_ID = 1198347965899751545  # Substitua pelo ID real do cargo de moderador
-
 class Dropdown(discord.ui.Select):
     def __init__(self):
         options = [
             discord.SelectOption(value="comprar", label="Comprar", emoji="👋"),
-            discord.SelectOption(value="duvidas", label="Duvidas", emoji="❓"),
+            discord.SelectOption(value="duvidas", label="Dúvidas", emoji="❓"),
             discord.SelectOption(value="denunciar", label="Denunciar", emoji="👮"),
             discord.SelectOption(value="parceria", label="Parcerias", emoji="🤝"),
-            discord.SelectOption(value="patrocinio", label="Patrocinio", emoji="🚀"),
+            discord.SelectOption(value="patrocinio", label="Patrocínio", emoji="🚀"),
         ]
         super().__init__(
             placeholder="Selecione uma opção...",
@@ -48,15 +45,18 @@ class Dropdown(discord.ui.Select):
             auto_archive_duration=1440  # 24 horas
         )
 
-        # Conceder permissão ao autor e aos moderadores
-        await thread.edit(invitable=False)  # Apenas moderadores podem adicionar membros
+        # Conceder permissão ao autor e ao cargo correspondente
+        await thread.edit(invitable=False)  # Apenas membros com manage_threads podem adicionar outros membros
         await thread.add_user(interaction.user)
 
-        mod_role = interaction.guild.get_role(MODERATOR_ROLE_ID)
-        if mod_role:
-            for member in interaction.guild.members:
-                if mod_role in member.roles:
-                    await thread.add_user(member)
+        # Conceder permissões ao cargo correspondente
+        category_role = interaction.guild.get_role(cargo_id)
+        if category_role:
+            overwrite = discord.PermissionOverwrite()
+            overwrite.read_messages = True
+            overwrite.send_messages = True
+            overwrite.manage_threads = True  # Permissão para adicionar membros
+            await thread.set_permissions(category_role, overwrite=overwrite)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
