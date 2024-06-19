@@ -44,9 +44,11 @@ class Dropdown(discord.ui.Select):
         )
 
         # Define permissões da thread
-        await thread.set_permissions(interaction.guild.default_role, read_messages=False)
-        await thread.set_permissions(interaction.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
-        await thread.set_permissions(interaction.guild.get_role(cargo_id), send_messages=True, read_messages=True, manage_threads=True)
+        await thread.edit(
+            invitable=False,
+            type=discord.ChannelType.private_thread
+        )
+        await thread.add_user(interaction.user)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
