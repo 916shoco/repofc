@@ -1,23 +1,22 @@
 import discord
 from discord.ext import commands
 
-# IDs dos cargos para cada categoria
 id_cargos = {
-    "comprar": 1198347965920706678,
-    "duvidas": 1198347965920706672,
-    "denunciar": 1198347965920706674,
-    "parceria": 1198347965912330274,
-    "patrocinio": 1198347965920706678
+    "comprar": 1198347965920706678,  # ID do cargo para compras
+    "duvidas": 1198347965920706672,  # ID do cargo para dúvidas
+    "denunciar": 1198347965920706674,  # ID do cargo para denúncias
+    "parceria": 1198347965912330274,  # ID do cargo para parcerias
+    "patrocinio": 1198347965920706678  # ID do cargo para patrocínios
 }
 
 class Dropdown(discord.ui.Select):
     def __init__(self):
         options = [
             discord.SelectOption(value="comprar", label="Comprar", emoji="👋"),
-            discord.SelectOption(value="duvidas", label="Dúvidas", emoji="❓"),
+            discord.SelectOption(value="duvidas", label="Duvidas", emoji="❓"),
             discord.SelectOption(value="denunciar", label="Denunciar", emoji="👮"),
             discord.SelectOption(value="parceria", label="Parcerias", emoji="🤝"),
-            discord.SelectOption(value="patrocinio", label="Patrocínio", emoji="🚀"),
+            discord.SelectOption(value="patrocinio", label="Patrocinio", emoji="🚀"),
         ]
         super().__init__(
             placeholder="Selecione uma opção...",
@@ -36,28 +35,18 @@ class Dropdown(discord.ui.Select):
         category = option.capitalize()
         cargo_id = id_cargos[option]
 
-        # Criar a thread privada
         thread_name = f"{interaction.user.name} - {category}"
         thread = await interaction.channel.create_thread(
             name=thread_name,
-            type=discord.ChannelType.private_thread,
             reason=f"Thread criada por {interaction.user.name} ({interaction.user.id})",
-            auto_archive_duration=1440  # 24 horas
+            auto_archive_duration=1440,  # 24 horas
+            type=discord.ChannelType.private_thread
         )
 
-        # Conceder permissão ao autor e ao cargo correspondente
-        await thread.edit(invitable=False)  # Apenas membros com manage_threads podem adicionar outros membros
-        await thread.add_user(interaction.user)
-
-        # Conceder permissões ao cargo correspondente
-        category_role = interaction.guild.get_role(cargo_id)
-        if category_role:
-            # Permissões para o cargo correspondente
-            overwrite = thread.overwrites_for(category_role)
-            overwrite.read_messages = True
-            overwrite.send_messages = True
-            overwrite.manage_threads = True  # Permissão para adicionar membros
-            await thread.set_permissions(category_role, overwrite=overwrite)
+        # Define permissões da thread
+        await thread.set_permissions(interaction.guild.default_role, read_messages=False)
+        await thread.set_permissions(interaction.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+        await thread.set_permissions(interaction.guild.get_role(cargo_id), send_messages=True, read_messages=True, manage_threads=True)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
@@ -80,11 +69,11 @@ class CloseTicket(discord.ui.View):
 
     @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='CloseTicket')
     async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.id == self.thread_creator_id ou qualquer função para verificar permissões:
+        if interaction.user.id == self.thread_creator_id or any(role.id == self.cargo_id for role in interaction.user.roles):
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
-            await interaction.response.send_message("Você não tem permissão para fechar este ticket.", ephemeral=True)
+            await interaction.response.send_message("Você não tem permissão para fazer isso.", ephemeral=True)
 
 class Ticket(commands.Cog, name="ticket"):
     def __init__(self, bot):
