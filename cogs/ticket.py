@@ -40,15 +40,8 @@ class Dropdown(discord.ui.Select):
             name=thread_name,
             reason=f"Thread criada por {interaction.user.name} ({interaction.user.id})",
             auto_archive_duration=1440,  # 24 horas
-            type=discord.ChannelType.private_thread
+            type=discord.ChannelType.private_thread  # Torna a thread privada
         )
-
-        # Define permissões da thread
-        await thread.edit(
-            invitable=False,
-            type=discord.ChannelType.private_thread
-        )
-        await thread.add_user(interaction.user)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
@@ -75,7 +68,7 @@ class CloseTicket(discord.ui.View):
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
-            await interaction.response.send_message("Você não tem permissão para fazer isso.", ephemeral=True)
+            await interaction.response.send_message("Isso não pode ser feito aqui...")
 
 class Ticket(commands.Cog, name="ticket"):
     def __init__(self, bot):
