@@ -53,13 +53,11 @@ class Dropdown(discord.ui.Select):
         category_role = interaction.guild.get_role(cargo_id)
         if category_role:
             # Permissões para o cargo correspondente
-            await thread.edit(permission_overwrites={
-                category_role: discord.PermissionOverwrite(
-                    read_messages=True,
-                    send_messages=True,
-                    manage_threads=True  # Permissão para adicionar membros
-                )
-            })
+            overwrite = thread.overwrites_for(category_role)
+            overwrite.read_messages = True
+            overwrite.send_messages = True
+            overwrite.manage_threads = True  # Permissão para adicionar membros
+            await thread.set_permissions(category_role, overwrite=overwrite)
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
@@ -82,7 +80,7 @@ class CloseTicket(discord.ui.View):
 
     @discord.ui.button(label="Fechar Ticket", style=discord.ButtonStyle.red, emoji="🔒", custom_id='CloseTicket')
     async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if interaction.user.id == self.thread_creator_id or any(role.id == self.cargo_id for role in interaction.user.roles):
+        if interaction.user.id == self.thread_creator_id ou qualquer função para verificar permissões:
             await interaction.response.send_message(f"O ticket foi arquivado por {interaction.user.mention}, obrigado por entrar em contato!")
             await interaction.channel.edit(archived=True, locked=True)
         else:
