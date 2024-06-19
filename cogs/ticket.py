@@ -52,11 +52,14 @@ class Dropdown(discord.ui.Select):
         # Conceder permissões ao cargo correspondente
         category_role = interaction.guild.get_role(cargo_id)
         if category_role:
-            overwrite = discord.PermissionOverwrite()
-            overwrite.read_messages = True
-            overwrite.send_messages = True
-            overwrite.manage_threads = True  # Permissão para adicionar membros
-            await thread.set_permissions(category_role, overwrite=overwrite)
+            # Permissões para o cargo correspondente
+            await thread.edit(permission_overwrites={
+                category_role: discord.PermissionOverwrite(
+                    read_messages=True,
+                    send_messages=True,
+                    manage_threads=True  # Permissão para adicionar membros
+                )
+            })
 
         await interaction.response.send_message(
             f"Olá {interaction.user.mention}, seu ticket foi aberto em {thread.mention}! Cargo correspondente: <@&{cargo_id}>",
